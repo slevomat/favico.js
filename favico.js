@@ -346,116 +346,6 @@
 			}
 		};
 
-		/**
-		 * Set image as icon
-		 */
-		var image = function (imageElement) {
-			_readyCb = function () {
-				try {
-					var w = imageElement.width;
-					var h = imageElement.height;
-					var newImg = document.createElement('img');
-					var ratio = (w / _w < h / _h) ? (w / _w) : (h / _h);
-					newImg.setAttribute('crossOrigin', 'anonymous');
-					newImg.onload=function(){
-						_context.clearRect(0, 0, _w, _h);
-						_context.drawImage(newImg, 0, 0, _w, _h);
-						link.setIcon(_canvas);
-					};
-					newImg.setAttribute('src', imageElement.getAttribute('src'));
-					newImg.height = (h / ratio);
-					newImg.width = (w / ratio);
-				} catch (e) {
-					throw new Error('Error setting image. Message: ' + e.message);
-				}
-			};
-			if (_ready) {
-				_readyCb();
-			}
-		};
-		/**
-		 * Set the icon from a source url. Won't work with badges.
-		 */
-		var rawImageSrc = function (url) {
-			_readyCb = function() {
-				link.setIconSrc(url);
-			};
-			if (_ready) {
-				_readyCb();
-			}
-		};
-		/**
-		 * Set video as icon
-		 */
-		var video = function (videoElement) {
-			_readyCb = function () {
-				try {
-					if (videoElement === 'stop') {
-						_stop = true;
-						icon.reset();
-						_stop = false;
-						return;
-					}
-					//var w = videoElement.width;
-					//var h = videoElement.height;
-					//var ratio = (w / _w < h / _h) ? (w / _w) : (h / _h);
-					videoElement.addEventListener('play', function () {
-						drawVideo(this);
-					}, false);
-
-				} catch (e) {
-					throw new Error('Error setting video. Message: ' + e.message);
-				}
-			};
-			if (_ready) {
-				_readyCb();
-			}
-		};
-		/**
-		 * Set video as icon
-		 */
-		var webcam = function (action) {
-			//UR
-			if (!window.URL || !window.URL.createObjectURL) {
-				window.URL = window.URL || {};
-				window.URL.createObjectURL = function (obj) {
-					return obj;
-				};
-			}
-			if (_browser.supported) {
-				var newVideo = false;
-				navigator.getUserMedia = navigator.getUserMedia || navigator.oGetUserMedia || navigator.msGetUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
-				_readyCb = function () {
-					try {
-						if (action === 'stop') {
-							_stop = true;
-							icon.reset();
-							_stop = false;
-							return;
-						}
-						newVideo = document.createElement('video');
-						newVideo.width = _w;
-						newVideo.height = _h;
-						navigator.getUserMedia({
-							video: true,
-							audio: false
-						}, function (stream) {
-							newVideo.src = URL.createObjectURL(stream);
-							newVideo.play();
-							drawVideo(newVideo);
-						}, function () {
-						});
-					} catch (e) {
-						throw new Error('Error setting webcam. Message: ' + e.message);
-					}
-				};
-				if (_ready) {
-					_readyCb();
-				}
-			}
-
-		};
-
 		var setOpt = function (key, value) {
 			var opts = key;
 			if (!(value == null && Object.prototype.toString.call(key) == '[object Object]')) {
@@ -475,26 +365,6 @@
 			_queue.push(_lastBadge);
 			icon.start();
 		};
-
-		/**
-		 * Draw video to context and repeat :)
-		 */
-		function drawVideo(video) {
-			if (video.paused || video.ended || _stop) {
-				return false;
-			}
-			//nasty hack for FF webcam (Thanks to Julian Ćwirko, kontakt@redsunmedia.pl)
-			try {
-				_context.clearRect(0, 0, _w, _h);
-				_context.drawImage(video, 0, 0, _w, _h);
-			} catch (e) {
-
-			}
-			_drawTimeout = setTimeout(function () {
-				drawVideo(video);
-			}, animation.duration);
-			link.setIcon(_canvas);
-		}
 
 		var link = {};
 		/**
@@ -873,10 +743,6 @@
 		init();
 		return {
 			badge: badge,
-			video: video,
-			image: image,
-			rawImageSrc: rawImageSrc,
-			webcam: webcam,
 			setOpt: setOpt,
 			reset: icon.reset,
 			browser: {

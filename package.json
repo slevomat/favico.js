@@ -1,11 +1,11 @@
 {
-  "name": "favico.js",
-  "version": "0.3.10",
+  "name": "favico.js-slevomat",
+  "version": "0.3.11",
   "description": "Favico.js is a library to manipulate the favicon, adding alert badges, render images or videos.",
   "main": "favico.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/ejci/favico.js.git"
+    "url": "git://github.com/slevomat/favico.js.git"
   },
   "publishConfig": {
     "registry": "http://registry.npmjs.org/"
@@ -17,7 +17,7 @@
   "author": "Miroslav Magda <magda.miroslav@gmail.com>",
   "license": "MIT or GPL-2.0",
   "bugs": {
-    "url": "https://github.com/ejci/favico.js/issues"
+    "url": "https://github.com/slevomat/favico.js/issues"
   },
   "devDependencies": {
     "uglify-js": "~2.4.0",
@@ -31,7 +31,7 @@
       "page"
     ]
   },
-  "homepage": "https://github.com/ejci/favico.js",
+  "homepage": "https://github.com/slevomat/favico.js",
   "dependencies": {
   },
   "scripts": {
